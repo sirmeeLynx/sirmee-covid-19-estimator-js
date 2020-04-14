@@ -8,6 +8,14 @@ const normalizeDuration = (periodType, duration) => {
   return converter[periodType](duration);
 };
 
+const estimateSevereHospitableCases = (data, infectionsByRequestedTime) => {
+  // challenge 2
+  const { totalHospitalBeds } = data;
+  const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
+  const hospitalBedsByRequestedTime = totalHospitalBeds - severeCasesByRequestedTime;
+  return { severeCasesByRequestedTime, hospitalBedsByRequestedTime };
+};
+
 const estimateInfectionSpread = (data, infectionMultiplierFactor) => {
   // challenge 1
   const { reportedCases, timeToElapse, periodType } = data;
@@ -20,9 +28,14 @@ const estimateInfectionSpread = (data, infectionMultiplierFactor) => {
 
 const covid19ImpactEstimator = (data) => {
   // best case estimation
-  const impact = estimateInfectionSpread(data, 10);
+  let impact = estimateInfectionSpread(data, 10);
+  let ch2 = estimateSevereHospitableCases(data, impact.infectionsByRequestedTime);
+  impact = { ...impact, ...ch2 };
   // severe case estimation
-  const severeImpact = estimateInfectionSpread(data, 50);
+  let severeImpact = estimateInfectionSpread(data, 50);
+  ch2 = estimateSevereHospitableCases(data, severeImpact.infectionsByRequestedTime);
+  severeImpact = { ...severeImpact, ...ch2 };
+
   return {
     data,
     impact,
