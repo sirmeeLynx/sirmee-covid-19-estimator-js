@@ -8,6 +8,18 @@ const normalizeDuration = (periodType, duration) => {
   return converter[periodType](duration);
 };
 
+const estimateICUVentilatorDIF = (data, infectionsByRequestedTime) => {
+  // challenge 3
+  // estimate ICU, Ventilators and Dollars in Flight
+  const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = data.region;
+  const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
+  const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
+  const durationInDays = normalizeDuration(data.periodType, data.timeToElapse);
+  const avgEarnings = avgDailyIncomeInUSD * durationInDays;
+  const dollarsInFlight = (infectionsByRequestedTime * avgDailyIncomePopulation) * avgEarnings;
+  return { casesForICUByRequestedTime, casesForVentilatorsByRequestedTime, dollarsInFlight };
+};
+
 const estimateSevereHospitableCases = (data, infectionsByRequestedTime) => {
   // challenge 2
   const { totalHospitalBeds } = data;
@@ -27,15 +39,18 @@ const estimateInfectionSpread = (data, infectionMultiplierFactor) => {
   return { currentlyInfected, infectionsByRequestedTime };
 };
 
+const estimatorChallenges = (data, infectionMultiplierFactor) => {
+  const ch1 = estimateInfectionSpread(data, infectionMultiplierFactor);
+  const ch2 = estimateSevereHospitableCases(data, ch1.infectionsByRequestedTime);
+  const ch3 = estimateICUVentilatorDIF(data, ch1.infectionsByRequestedTime);
+  return { ...ch1, ...ch2, ...ch3 };
+};
+
 const covid19ImpactEstimator = (data) => {
   // best case estimation
-  let impact = estimateInfectionSpread(data, 10);
-  let ch2 = estimateSevereHospitableCases(data, impact.infectionsByRequestedTime);
-  impact = { ...impact, ...ch2 };
+  const impact = estimatorChallenges(data, 10);
   // severe case estimation
-  let severeImpact = estimateInfectionSpread(data, 50);
-  ch2 = estimateSevereHospitableCases(data, severeImpact.infectionsByRequestedTime);
-  severeImpact = { ...severeImpact, ...ch2 };
+  const severeImpact = estimatorChallenges(data, 50);
 
   return {
     data,
