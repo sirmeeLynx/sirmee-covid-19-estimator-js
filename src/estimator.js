@@ -16,7 +16,8 @@ const estimateICUVentilatorDIF = (data, infectionsByRequestedTime) => {
   const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
   const durationInDays = normalizeDuration(data.periodType, data.timeToElapse);
   const avgEarnings = avgDailyIncomeInUSD * durationInDays;
-  const dollarsInFlight = (infectionsByRequestedTime * avgDailyIncomePopulation) * avgEarnings;
+  const dif = (infectionsByRequestedTime * avgDailyIncomePopulation) * avgEarnings;
+  const dollarsInFlight = Math.floor(dif);
   return { casesForICUByRequestedTime, casesForVentilatorsByRequestedTime, dollarsInFlight };
 };
 
