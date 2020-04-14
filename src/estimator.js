@@ -1,17 +1,17 @@
-const estimateInfectionSpread = (reportedCases, infectionMultiplierFactor) => {
+const estimateInfectionSpread = (data, infectionMultiplierFactor) => {
   // challenge 1
+  const { reportedCases, timeElapsed } = data;
+  const infectionDoublingFactor = Math.floor(timeElapsed / 3);
   const currentlyInfected = reportedCases * infectionMultiplierFactor;
-  const infectionsByRequestedTime = currentlyInfected * (1024); // 2^(30 % 3)
+  const infectionsByRequestedTime = currentlyInfected * (2 ** infectionDoublingFactor);
   return { currentlyInfected, infectionsByRequestedTime };
 };
 
 const covid19ImpactEstimator = (data) => {
-  const { reportedCases } = data;
-  // let impact, severeImpact;
   // best case estimation
-  const impact = estimateInfectionSpread(reportedCases, 10);
+  const impact = estimateInfectionSpread(data, 10);
   // severe case estimation
-  const severeImpact = estimateInfectionSpread(reportedCases, 50);
+  const severeImpact = estimateInfectionSpread(data, 50);
   return {
     data,
     impact,
