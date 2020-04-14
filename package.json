@@ -5,9 +5,11 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "lint": "eslint ./src/ --fix"
+    "lint": "eslint ./src/ --fix",
+    "serve": "node ./src/api/on-covid.js"
   },
   "dependencies": {
+    "express": "^4.17.1",
     "on-covid-19": "^0.1.3"
   },
   "devDependencies": {
