@@ -11,8 +11,9 @@ const normalizeDuration = (periodType, duration) => {
 const estimateSevereHospitableCases = (data, infectionsByRequestedTime) => {
   // challenge 2
   const { totalHospitalBeds } = data;
+  const availableBeds = totalHospitalBeds - Math.floor(totalHospitalBeds * 0.65);
   const severeCasesByRequestedTime = 0.15 * infectionsByRequestedTime;
-  const hospitalBedsByRequestedTime = totalHospitalBeds - severeCasesByRequestedTime;
+  const hospitalBedsByRequestedTime = availableBeds - severeCasesByRequestedTime;
   return { severeCasesByRequestedTime, hospitalBedsByRequestedTime };
 };
 
