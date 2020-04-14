@@ -1,12 +1,12 @@
 const normalizeDuration = (periodType, duration) => {
-    const converter = {
-        days : (d) => d,
-        weeks: (w) => w * 7,
-        months:(m) => m * 30
-    }
+  const converter = {
+    days: (d) => d,
+    weeks: (w) => w * 7,
+    months: (m) => m * 30
+  };
 
-    return converter[periodType](duration);
-}
+  return converter[periodType](duration);
+};
 
 const estimateInfectionSpread = (data, infectionMultiplierFactor) => {
   // challenge 1
