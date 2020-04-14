@@ -12,8 +12,8 @@ const estimateICUVentilatorDIF = (data, infectionsByRequestedTime) => {
   // challenge 3
   // estimate ICU, Ventilators and Dollars in Flight
   const { avgDailyIncomeInUSD, avgDailyIncomePopulation } = data.region;
-  const casesForICUByRequestedTime = 0.05 * infectionsByRequestedTime;
-  const casesForVentilatorsByRequestedTime = 0.02 * infectionsByRequestedTime;
+  const casesForICUByRequestedTime = Math.floor(0.05 * infectionsByRequestedTime);
+  const casesForVentilatorsByRequestedTime = Math.floor(0.02 * infectionsByRequestedTime);
   const durationInDays = normalizeDuration(data.periodType, data.timeToElapse);
   const avgEarnings = avgDailyIncomeInUSD * durationInDays;
   const dif = (infectionsByRequestedTime * avgDailyIncomePopulation) * avgEarnings;
