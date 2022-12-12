@@ -9,7 +9,7 @@
     "serve": "node ./src/api/on-covid.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "on-covid-19": "^0.1.3"
   },
   "devDependencies": {
